@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Route – Okt/Nov</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #E8E6E0;
+  background: #141412;
+  padding: 36px 24px 56px 24px;
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.header { margin-bottom: 32px; }
+.header h1 { font-size: 22px; font-weight: 700; color: #F5F3ED; letter-spacing: -0.3px; }
+.header p { font-size: 13px; color: #666; margin-top: 5px; }
+
+.timeline { position: relative; padding-left: 38px; }
+.timeline::before { content:''; position:absolute; left:11px; top:18px; bottom:18px; width:1.5px; background: #2C2C2A; }
+
+.stop { position: relative; margin-bottom: 8px; }
+.dot { position:absolute; left:-30px; top:21px; width:15px; height:15px; border-radius:50%; border:3px solid #141412; z-index:1; }
+
+.card { border-radius:14px; border:1px solid rgba(255,255,255,0.07); overflow:hidden; }
+.card-head { padding:16px 18px 14px; }
+.card-title { font-size:16px; font-weight:700; letter-spacing:-0.2px; }
+.card-dates { font-size:12px; margin-top:3px; font-weight:500; }
+.card-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.pill { font-size:12px; padding:4px 10px; border-radius:20px; font-weight:500; }
+
+.sub-wrap { padding:0 14px 14px; display:flex; flex-direction:column; gap:8px; }
+.sub { border-radius:10px; border:1px solid rgba(255,255,255,0.06); overflow:hidden; }
+.sub-head { padding:11px 13px 9px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; user-select:none; transition: opacity 0.15s; }
+.sub-head:hover { opacity:0.75; }
+.sub-title { font-size:13px; font-weight:600; }
+.sub-meta { font-size:11px; margin-top:2px; font-weight:500; }
+.chev { font-size:9px; opacity:0.5; transition:transform 0.2s; flex-shrink:0; margin-top:3px; }
+.chev.open { transform:rotate(180deg); }
+.sub-body { display:none; padding:0 13px 11px; }
+.sub-body.open { display:block; }
+.tips { display:flex; flex-direction:column; gap:6px; margin-top:5px; }
+.tip { font-size:12.5px; line-height:1.6; padding-left:14px; position:relative; }
+.tip::before { content:'—'; position:absolute; left:0; opacity:0.3; }
+
+.transfer { font-size:11.5px; margin:10px 0; display:flex; align-items:center; gap:8px; color:#555; }
+.transfer::before, .transfer::after { content:''; flex:1; height:1px; background:#252523; }
+
+/* PURPLE (Tokyo) */
+.dot-purple { background:#9D96F0; }
+.card.purple { background: linear-gradient(145deg, #1A1833 0%, #201E42 100%); }
+.card.purple .card-title { color: #DDD9FF; }
+.card.purple .card-dates { color: #8880CC; }
+.card.purple .pill { background: rgba(157,150,240,0.15); color: #B8B3F5; }
+.sub.purple-sub { background: rgba(157,150,240,0.08); }
+.sub.purple-sub .sub-title { color: #C8C3FF; }
+.sub.purple-sub .sub-meta { color: #7A74BB; }
+.sub.purple-sub .tip { color: #AAA6D8; }
+
+/* CORAL (Kyoto) */
+.dot-coral { background:#E0724A; }
+.card.coral { background: linear-gradient(145deg, #281610 0%, #321B12 100%); }
+.card.coral .card-title { color: #FFD5C2; }
+.card.coral .card-dates { color: #A05A40; }
+.card.coral .pill { background: rgba(224,114,74,0.15); color: #F0B090; }
+.sub.amber-sub { background: rgba(210,155,50,0.08); }
+.sub.amber-sub .sub-title { color: #FFD98A; }
+.sub.amber-sub .sub-meta { color: #9A7030; }
+.sub.amber-sub .tip { color: #C8A860; }
+
+/* TEAL (Osaka) */
+.dot-teal { background:#2BBF90; }
+.card.teal { background: linear-gradient(145deg, #0C2820 0%, #102E24 100%); }
+.card.teal .card-title { color: #C0F0DF; }
+.card.teal .card-dates { color: #3A9070; }
+.card.teal .pill { background: rgba(43,191,144,0.13); color: #80D8B8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🇯🇵 Japan Route – Verena</h1>
+  <p>25. Oktober – 6. November</p>
+</div>
+
+<div class="timeline">
+
+  <!-- STOP 1: TOKYO -->
+  <div class="stop">
+    <div class="dot dot-purple"></div>
+    <div class="card purple">
+      <div class="card-head">
+        <div class="card-title">Tokyo – Ankommen &amp; Erkunden</div>
+        <div class="card-dates">25. Okt – 28. Okt &nbsp;·&nbsp; 3 Nächte</div>
+        <div class="card-pills">
+          <span class="pill">Senso-ji – Tempel, direkt vor der Tür</span>
+          <span class="pill">Nakamise-dori – Einkaufsstraße zum Tempel</span>
+          <span class="pill">Tokyo Skytree – Aussichtsturm, Tickets vorbuchen</span>
+          <span class="pill">Tsukiji Markt – morgens Fischmarkt-Tour, vorbuchen</span>
+          <span class="pill">Teamlab – danach! digitale Kunstinstallation, vorbuchen</span>
+          <span class="pill">Ueno Park – Park mit Museen &amp; Tempel</span>
+          <span class="pill">Akihabara – Elektronik &amp; Anime-Viertel</span>
+          <span class="pill">Sumida Fluss – Spaziergang mit Skytree-Blick</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">Shinkansen Nozomi &nbsp;·&nbsp; ca. 2h 15m</div>
+
+  <!-- STOP 2: KYOTO -->
+  <div class="stop">
+    <div class="dot dot-coral"></div>
+    <div class="card coral">
+      <div class="card-head">
+        <div class="card-title">Kyoto – Tempel &amp; Herbstlaub</div>
+        <div class="card-dates">28. Okt – 1. Nov &nbsp;·&nbsp; 4 Nächte</div>
+        <div class="card-pills">
+          <span class="pill">Fushimi Inari – früh morgens!</span>
+          <span class="pill">Arashiyama &amp; Bambushain</span>
+          <span class="pill">Kinkaku-ji</span>
+          <span class="pill">Gion abends</span>
+          <span class="pill">Eikan-do Herbstlaub</span>
+          <span class="pill">Tofuku-ji</span>
+          <span class="pill">Nishiki-Markt – Markthalle, Streetfood</span>
+          <span class="pill">Hitaki Feuer-Festival – Fushimi Inari, Ende Okt/Anfang Nov</span>
+        </div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sub amber-sub">
+          <div class="sub-head" onclick="toggle('nara')">
+            <div>
+              <div class="sub-title">↳ Nara &nbsp;·&nbsp; Tagesausflug</div>
+              <div class="sub-meta">45 Min mit dem Zug &nbsp;·&nbsp; halber bis ganzer Tag</div>
+            </div>
+            <span class="chev" id="nara-chev">▼</span>
+          </div>
+          <div class="sub-body" id="nara">
+            <div class="tips">
+              <div class="tip">Todai-ji – der größte hölzerne Tempel der Welt, der Buddha drinnen ist beeindruckend groß</div>
+              <div class="tip">Freilaufende Hirsche überall – heilig und zutraulich, Shika-Senbei (Hirschkekse) kaufen und füttern</div>
+              <div class="tip">Kasuga Taisha – Schrein mit Hunderten von Steinlaternen, sehr atmosphärisch</div>
+              <div class="tip">Isuien Garten – einer der schönsten Zen-Gärten Japans, kaum bekannt, sehr ruhig</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">30 Min mit dem Zug</div>
+
+  <!-- STOP 3: OSAKA -->
+  <div class="stop">
+    <div class="dot dot-teal"></div>
+    <div class="card teal">
+      <div class="card-head">
+        <div class="card-title">Osaka – Essen &amp; Dotonbori</div>
+        <div class="card-dates">1. Nov – 2. Nov &nbsp;·&nbsp; 1 Nacht</div>
+        <div class="card-pills">
+          <span class="pill">Dotonbori – Ausgehviertel mit Kanal, abends</span>
+          <span class="pill">Kuromon Markt – Markthalle, Streetfood</span>
+          <span class="pill">Takoyaki essen – Oktopusbällchen, Osaka-Spezialität</span>
+          <span class="pill">Okonomiyaki essen – japanischer Pfannkuchen</span>
+          <span class="pill">Shinsekai – altes Retro-Viertel</span>
+          <span class="pill">Morgens Frühstück &amp; weiter nach Tokyo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">Shinkansen Nozomi &nbsp;·&nbsp; ca. 2h 30m</div>
+
+  <!-- STOP 4: TOKYO SHOPPING -->
+  <div class="stop">
+    <div class="dot dot-purple"></div>
+    <div class="card purple">
+      <div class="card-head">
+        <div class="card-title">Tokyo – Shopping &amp; Abschluss</div>
+        <div class="card-dates">2. Nov – 6. Nov &nbsp;·&nbsp; 4 Nächte &nbsp;·&nbsp; Abflug 6. Nov</div>
+        <div class="card-pills">
+          <span class="pill">Shinjuku – direkt vor der Tür, Shopping &amp; Nightlife</span>
+          <span class="pill">Golden Gai – winzige Bar-Gassen, abends</span>
+          <span class="pill">Isetan &amp; Takashimaya – beste Kaufhäuser Tokyos</span>
+          <span class="pill">Meiji-Schrein – Herbstfestival 1.–3. Nov!</span>
+          <span class="pill">2. Nov: Bugaku Hofstanz am Schrein, 11:45 Uhr</span>
+          <span class="pill">3. Nov: Yabusame – Bogenschießen zu Pferd, 13 Uhr – früh da sein!</span>
+          <span class="pill">Shibuya Scramble Crossing – die ikonische Kreuzung</span>
+          <span class="pill">Harajuku Takeshita-dori – verrückte Mode &amp; Souvenirs</span>
+          <span class="pill">Omotesando – elegantes Shopping-Viertel</span>
+          <span class="pill">Shimokitazawa – Vintage &amp; Second-Hand-Viertel</span>
+          <span class="pill">Don Quijote – günstiger Souvenir-Laden, 24h</span>
+        </div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sub purple-sub">
+          <div class="sub-head" onclick="toggle('kamakura')">
+            <div>
+              <div class="sub-title">↳ Kamakura &nbsp;·&nbsp; Tagesausflug</div>
+              <div class="sub-meta">1h 10m mit dem Zug &nbsp;·&nbsp; ganzer Tag</div>
+            </div>
+            <span class="chev" id="kamakura-chev">▼</span>
+          </div>
+          <div class="sub-body" id="kamakura">
+            <div class="tips">
+              <div class="tip">Café Yoridocoro – morgens zum Frühstück, gemütlicher Start in den Tag</div>
+              <div class="tip">Kotoku-in – der große Buddha, 13m hoch, sitzt im Freien. Man kann sogar reingehen</div>
+              <div class="tip">Hase-dera Tempel – Tausende kleine Jizo-Figuren, schöner Garten, Meerblick von oben</div>
+              <div class="tip">Tsurugaoka Hachimangu – Hauptschrein der Stadt mit schöner Allee und Lotusterassen</div>
+              <div class="tip">Komachi-dori – Fußgängerzone mit Souvenirs, Matcha-Snacks und kleinen Läden</div>
+              <div class="tip">Enoshima optional dazu: 20 Min weiter, kleine Insel mit Tempel und Meeresfrüchten</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EVENTS & MÄRKTE -->
+<div style="margin-top: 32px;">
+  <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:#555; margin-bottom:12px;">Veranstaltungen &amp; Märkte im Reisezeitraum</div>
+
+  <!-- TOKYO 1 -->
+  <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#7A74BB; margin: 14px 0 6px;">Tokyo · 25.–28. Okt</div>
+
+  <div style="border-radius:10px; border:1px solid rgba(157,150,240,0.2); background:#1A1833; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev1')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#C8C3FF;">Tokyo Ramen Festival</div>
+        <div style="font-size:11px; color:#7A74BB; margin-top:2px;">Ende Okt – Anfang Nov &nbsp;·&nbsp; Komazawa Olympic Park</div>
+      </div>
+      <span class="chev" id="ev1-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev1" style="padding:0 14px 11px; color:#AAA6D8; font-size:12.5px; line-height:1.6;">
+      Fast 40 Ramen-Stände aus ganz Japan an einem Ort. Jede Region hat ihren eigenen Stil – Sapporo, Hakata, Tokyo, Kyoto. Eintritt frei, Ramen-Bowls einzeln kaufen. Perfekt für einen Nachmittag.
+    </div>
+  </div>
+
+  <!-- KYOTO -->
+  <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#A05A40; margin: 14px 0 6px;">Kyoto · 28. Okt – 1. Nov</div>
+
+  <div style="border-radius:10px; border:1px solid rgba(224,114,74,0.2); background:#281610; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev2')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#FFD5C2;">Kyoto Antique Fair</div>
+        <div style="font-size:11px; color:#A05A40; margin-top:2px;">30. Okt – 1. Nov &nbsp;·&nbsp; Kyoto Pulse Plaza</div>
+      </div>
+      <span class="chev" id="ev2-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev2" style="padding:0 14px 11px; color:#C8A090; font-size:12.5px; line-height:1.6;">
+      Größte Antiquitätenmesse Westjapans mit über 350 Händlern. Vintage Kimono, Keramik, Möbel, Kunstobjekte. Eintritt ca. 500 Yen. Guter Ausflug für einen Nachmittag.
+    </div>
+  </div>
+
+  <div style="border-radius:10px; border:1px solid rgba(224,114,74,0.2); background:#281610; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev3')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#FFD5C2;">Gion Odori – Geisha Tanzvorführung</div>
+        <div style="font-size:11px; color:#A05A40; margin-top:2px;">Anfang November &nbsp;·&nbsp; Gion Higashi Kaburenjo Theater</div>
+      </div>
+      <span class="chev" id="ev3-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev3" style="padding:0 14px 11px; color:#C8A090; font-size:12.5px; line-height:1.6;">
+      Die einzige öffentliche Herbst-Tanzvorführung der Geisha in Kyoto – einmal im Jahr. Geiko und Maiko des Gion Higashi Viertels zeigen klassische Tänze und Gesang. Tickets im Voraus kaufen, sind schnell ausverkauft. Sehr besonders.
+    </div>
+  </div>
+
+  <div style="border-radius:10px; border:1px solid rgba(224,114,74,0.2); background:#281610; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev4')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#FFD5C2;">Abend-Illuminationen in Tempeln</div>
+        <div style="font-size:11px; color:#A05A40; margin-top:2px;">Ab Anfang Nov &nbsp;·&nbsp; Eikan-do, Kodai-ji, Kiyomizu-dera</div>
+      </div>
+      <span class="chev" id="ev4-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev4" style="padding:0 14px 11px; color:#C8A090; font-size:12.5px; line-height:1.6;">
+      Mehrere Tempel öffnen abends und beleuchten ihre Ahornbäume – rote und orangene Blätter im Lichtkegel, reflektiert in Teichen. Eikan-do ist das bekannteste Highlight. Getrennte Abendtickets nötig, lohnt sich sehr.
+    </div>
+  </div>
+
+  <div style="border-radius:10px; border:1px solid rgba(224,114,74,0.2); background:#281610; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev5')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#FFD5C2;">Ohitaki Feuer-Festival &nbsp;<span style="font-size:11px; font-weight:400; opacity:0.7">– Fushimi Inari</span></div>
+        <div style="font-size:11px; color:#A05A40; margin-top:2px;">Anfang November &nbsp;·&nbsp; Fushimi Inari Taisha</div>
+      </div>
+      <span class="chev" id="ev5-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev5" style="padding:0 14px 11px; color:#C8A090; font-size:12.5px; line-height:1.6;">
+      Hunderttausende beschriftete Holzstäbchen mit Wünschen und Gebeten werden in einem großen Feuer verbrannt. Die Flammen tragen die Gebete in den Himmel. Sehr atmosphärisch, besonders nachts. Kostenlos.
+    </div>
+  </div>
+
+  <div style="border-radius:10px; border:1px solid rgba(210,155,50,0.2); background:#1E1200; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev6')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#FFD98A;">Toji Garakuta-ichi – Antikmarkt</div>
+        <div style="font-size:11px; color:#9A7030; margin-top:2px;">1. Nov (erster Sonntag) &nbsp;·&nbsp; Toji Tempel &nbsp;·&nbsp; 7–16 Uhr</div>
+      </div>
+      <span class="chev" id="ev6-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev6" style="padding:0 14px 11px; color:#C8A860; font-size:12.5px; line-height:1.6;">
+      Antikmarkt unter dem fünfstöckigen Holzpagoda des Toji Tempels – dem höchsten hölzernen Pagoda Japans. Vintage Kimono, Keramik, alte Holzschnitte, Kalligraphie. Kleinerer und gemütlicherer Markt als der große am 21. Eintritt frei. Letzter Tag in Kyoto – perfekter Abschluss.
+    </div>
+  </div>
+
+  <!-- TOKYO 2 -->
+  <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#7A74BB; margin: 14px 0 6px;">Tokyo · 2.–6. Nov</div>
+
+  <div style="border-radius:10px; border:1px solid rgba(157,150,240,0.2); background:#1A1833; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev7')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#C8C3FF;">Meiji-Schrein Herbstfestival</div>
+        <div style="font-size:11px; color:#7A74BB; margin-top:2px;">1.–3. Nov &nbsp;·&nbsp; Meiji Jingu &nbsp;·&nbsp; kostenlos</div>
+      </div>
+      <span class="chev" id="ev7-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev7" style="padding:0 14px 11px; color:#AAA6D8; font-size:12.5px; line-height:1.6;">
+      Das große jährliche Herbstfestival des Meiji-Schreins mit traditionellen Darbietungen über drei Tage.<br><br>
+      <strong style="color:#C8C3FF;">2. Nov, 11:45 Uhr:</strong> Bugaku – klassischer Hofstanz in prächtigen Kostümen, über 1.200 Jahre alt.<br>
+      <strong style="color:#C8C3FF;">3. Nov, 9 Uhr:</strong> Kyudo – rituelles Bogenschießen.<br>
+      <strong style="color:#C8C3FF;">3. Nov, 13 Uhr:</strong> Yabusame – Bogenschießen zu Pferd. Reiter in historischen Jagdkostümen galoppieren eine 200m-Strecke und schießen auf Ziele. Früh da sein für einen guten Platz!
+    </div>
+  </div>
+
+  <div style="border-radius:10px; border:1px solid rgba(157,150,240,0.2); background:#1A1833; overflow:hidden; margin-bottom:6px;">
+    <div style="padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start;" onclick="toggle('ev8')">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:#C8C3FF;">Oedo Antique Market</div>
+        <div style="font-size:11px; color:#7A74BB; margin-top:2px;">1. &amp; 3. Sonntag des Monats &nbsp;·&nbsp; Tokyo International Forum</div>
+      </div>
+      <span class="chev" id="ev8-chev">▼</span>
+    </div>
+    <div class="sub-body" id="ev8" style="padding:0 14px 11px; color:#AAA6D8; font-size:12.5px; line-height:1.6;">
+      Japans größter Outdoor-Antikmarkt mit ca. 250 Händlern. Vintage Kimono, Porzellan, alte Holzschnitte, Lackobjekte, Schmuck. Im November fällt der 3. Sonntag auf den 15. Nov – nach Abreise. Aber der 1. Sonntag (1. Nov) ist noch in Kyoto. Check ob es einen anderen Markt-Tag gibt!
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(id) {
+  const b = document.getElementById(id);
+  const c = document.getElementById(id+'-chev');
+  const o = b.classList.toggle('open');
+  if(c) c.classList.toggle('open', o);
+}
+</script>
+</body>
+</html>
