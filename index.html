@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Route – Okt/Nov</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #E8E6E0;
+  background: #141412;
+  padding: 36px 24px 56px 24px;
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+/* EDIT MODE TOGGLE */
+.edit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #1E1E1C;
+  border: 1px solid #2C2C2A;
+}
+.edit-bar span { font-size: 12px; color: #666; }
+.toggle-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #2E2E2C;
+  color: #AAA;
+  transition: all 0.2s;
+}
+.toggle-btn.active { background: #4A4A8A; color: #DDD9FF; }
+
+.header { margin-bottom: 32px; }
+.header h1 { font-size: 22px; font-weight: 700; color: #F5F3ED; letter-spacing: -0.3px; }
+.header p { font-size: 13px; color: #666; margin-top: 5px; }
+
+.timeline { position: relative; padding-left: 38px; }
+.timeline::before { content:''; position:absolute; left:11px; top:18px; bottom:18px; width:1.5px; background: #2C2C2A; }
+
+.stop { position: relative; margin-bottom: 8px; }
+.dot { position:absolute; left:-30px; top:21px; width:15px; height:15px; border-radius:50%; border:3px solid #141412; z-index:1; }
+
+.card { border-radius:14px; border:1px solid rgba(255,255,255,0.07); overflow:hidden; }
+.card-head { padding:16px 18px 14px; }
+.card-title { font-size:16px; font-weight:700; letter-spacing:-0.2px; }
+.card-dates { font-size:12px; margin-top:3px; font-weight:500; }
+.card-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+
+/* PILL */
+.pill-wrap { position: relative; display: inline-flex; align-items: center; }
+.pill {
+  font-size:12px; padding:4px 10px; border-radius:20px; font-weight:500;
+  cursor: default;
+  transition: padding-right 0.15s;
+}
+.pill.editable { cursor: text; outline: none; }
+.pill.editable:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.2); }
+.del-pill {
+  display: none;
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #E05050;
+  color: white;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  z-index: 2;
+}
+.edit-mode .del-pill { display: block; }
+.edit-mode .pill { cursor: text; }
+
+.add-pill-btn {
+  display: none;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px dashed rgba(255,255,255,0.2);
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  font-weight: 500;
+}
+.edit-mode .add-pill-btn { display: inline-flex; align-items: center; gap: 4px; }
+.add-pill-btn:hover { border-color: rgba(255,255,255,0.4); color: #CCC; }
+
+/* SUB CARDS */
+.sub-wrap { padding:0 14px 14px; display:flex; flex-direction:column; gap:8px; }
+.sub { border-radius:10px; border:1px solid rgba(255,255,255,0.06); overflow:hidden; }
+.sub-head { padding:11px 13px 9px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; user-select:none; transition: opacity 0.15s; }
+.sub-head:hover { opacity:0.75; }
+.sub-title { font-size:13px; font-weight:600; }
+.sub-meta { font-size:11px; margin-top:2px; font-weight:500; }
+.chev { font-size:9px; opacity:0.5; transition:transform 0.2s; flex-shrink:0; margin-top:3px; }
+.chev.open { transform:rotate(180deg); }
+.sub-body { display:none; padding:0 13px 11px; }
+.sub-body.open { display:block; }
+
+/* TIPS */
+.tips { display:flex; flex-direction:column; gap:6px; margin-top:5px; }
+.tip-wrap { display: flex; align-items: flex-start; gap: 6px; }
+.tip {
+  font-size:12.5px; line-height:1.6; padding-left:14px; position:relative; flex:1;
+}
+.tip::before { content:'—'; position:absolute; left:0; opacity:0.3; }
+.tip.editable { cursor: text; outline: none; }
+.tip.editable:focus { background: rgba(255,255,255,0.04); border-radius: 4px; }
+
+.del-tip {
+  display: none;
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: #E05050;
+  color: white;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+}
+.edit-mode .del-tip { display: block; }
+
+.add-tip-btn {
+  display: none;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px dashed rgba(255,255,255,0.15);
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  margin-top: 4px;
+  text-align: left;
+}
+.edit-mode .add-tip-btn { display: block; }
+.add-tip-btn:hover { color: #AAA; border-color: rgba(255,255,255,0.3); }
+
+/* TRANSFER */
+.transfer { font-size:11.5px; margin:10px 0; display:flex; align-items:center; gap:8px; color:#555; }
+.transfer::before, .transfer::after { content:''; flex:1; height:1px; background:#252523; }
+
+/* COLORS */
+.dot-purple { background:#9D96F0; }
+.card.purple { background: linear-gradient(145deg, #1A1833 0%, #201E42 100%); }
+.card.purple .card-title { color: #DDD9FF; }
+.card.purple .card-dates { color: #8880CC; }
+.card.purple .pill { background: rgba(157,150,240,0.15); color: #B8B3F5; }
+.sub.purple-sub { background: rgba(157,150,240,0.08); }
+.sub.purple-sub .sub-title { color: #C8C3FF; }
+.sub.purple-sub .sub-meta { color: #7A74BB; }
+.sub.purple-sub .tip { color: #AAA6D8; }
+
+.dot-coral { background:#E0724A; }
+.card.coral { background: linear-gradient(145deg, #281610 0%, #321B12 100%); }
+.card.coral .card-title { color: #FFD5C2; }
+.card.coral .card-dates { color: #A05A40; }
+.card.coral .pill { background: rgba(224,114,74,0.15); color: #F0B090; }
+.sub.amber-sub { background: rgba(210,155,50,0.08); }
+.sub.amber-sub .sub-title { color: #FFD98A; }
+.sub.amber-sub .sub-meta { color: #9A7030; }
+.sub.amber-sub .tip { color: #C8A860; }
+
+.dot-teal { background:#2BBF90; }
+.card.teal { background: linear-gradient(145deg, #0C2820 0%, #102E24 100%); }
+.card.teal .card-title { color: #C0F0DF; }
+.card.teal .card-dates { color: #3A9070; }
+.card.teal .pill { background: rgba(43,191,144,0.13); color: #80D8B8; }
+
+/* EVENTS SECTION */
+.events-section { margin-top: 32px; }
+.section-label-main { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:#555; margin-bottom:12px; }
+.section-label-city { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin: 14px 0 6px; }
+.ev-card { border-radius:10px; overflow:hidden; margin-bottom:6px; }
+.ev-head { padding:11px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; }
+.ev-title { font-size:13px; font-weight:600; }
+.ev-meta { font-size:11px; margin-top:2px; }
+.ev-body { display:none; padding:0 14px 11px; font-size:12.5px; line-height:1.6; }
+.ev-body.open { display:block; }
+</style>
+</head>
+<body>
+
+<div class="edit-bar">
+  <span>✏️ Bearbeitungsmodus</span>
+  <button class="toggle-btn" onclick="toggleEditMode()" id="editBtn">Bearbeiten</button>
+</div>
+
+<div class="header">
+  <h1>🇯🇵 Japan Route – Verena</h1>
+  <p>25. Oktober – 6. November</p>
+</div>
+
+<div class="timeline">
+
+  <!-- STOP 1: TOKYO -->
+  <div class="stop">
+    <div class="dot dot-purple"></div>
+    <div class="card purple">
+      <div class="card-head">
+        <div class="card-title">Tokyo – Ankommen &amp; Erkunden</div>
+        <div class="card-dates">25. Okt – 28. Okt &nbsp;·&nbsp; 3 Nächte</div>
+        <div class="card-pills" id="pills-tokyo1">
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Senso-ji – Tempel, direkt vor der Tür</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Nakamise-dori – Einkaufsstraße zum Tempel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Tokyo Skytree – Aussichtsturm, Tickets vorbuchen</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Tsukiji Markt – morgens Fischmarkt-Tour, vorbuchen</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Teamlab – danach! digitale Kunstinstallation, vorbuchen</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Ueno Park – Park mit Museen &amp; Tempel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Akihabara – Elektronik &amp; Anime-Viertel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Sumida Fluss – Spaziergang mit Skytree-Blick</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <button class="add-pill-btn" onclick="addPill('pills-tokyo1')">+ Punkt hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">Shinkansen Nozomi &nbsp;·&nbsp; ca. 2h 15m</div>
+
+  <!-- STOP 2: KYOTO -->
+  <div class="stop">
+    <div class="dot dot-coral"></div>
+    <div class="card coral">
+      <div class="card-head">
+        <div class="card-title">Kyoto – Tempel &amp; Herbstlaub</div>
+        <div class="card-dates">28. Okt – 1. Nov &nbsp;·&nbsp; 4 Nächte</div>
+        <div class="card-pills" id="pills-kyoto">
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Fushimi Inari – früh morgens!</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Arashiyama &amp; Bambushain</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Kinkaku-ji</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Gion abends</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Eikan-do Herbstlaub</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Tofuku-ji</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Nishiki-Markt – Markthalle, Streetfood</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Hitaki Feuer-Festival – Fushimi Inari, Ende Okt/Anfang Nov</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <button class="add-pill-btn" onclick="addPill('pills-kyoto')">+ Punkt hinzufügen</button>
+        </div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sub amber-sub">
+          <div class="sub-head" onclick="toggle('nara')">
+            <div>
+              <div class="sub-title">↳ Nara &nbsp;·&nbsp; Tagesausflug</div>
+              <div class="sub-meta">45 Min mit dem Zug &nbsp;·&nbsp; halber bis ganzer Tag</div>
+            </div>
+            <span class="chev" id="nara-chev">▼</span>
+          </div>
+          <div class="sub-body" id="nara">
+            <div class="tips" id="tips-nara">
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Todai-ji – der größte hölzerne Tempel der Welt, der Buddha drinnen ist beeindruckend groß</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Freilaufende Hirsche überall – heilig und zutraulich, Shika-Senbei (Hirschkekse) kaufen und füttern</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Kasuga Taisha – Schrein mit Hunderten von Steinlaternen, sehr atmosphärisch</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Isuien Garten – einer der schönsten Zen-Gärten Japans, kaum bekannt, sehr ruhig</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+            </div>
+            <button class="add-tip-btn" onclick="addTip('tips-nara')">+ Punkt hinzufügen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">30 Min mit dem Zug</div>
+
+  <!-- STOP 3: OSAKA -->
+  <div class="stop">
+    <div class="dot dot-teal"></div>
+    <div class="card teal">
+      <div class="card-head">
+        <div class="card-title">Osaka – Essen &amp; Dotonbori</div>
+        <div class="card-dates">1. Nov – 2. Nov &nbsp;·&nbsp; 1 Nacht</div>
+        <div class="card-pills" id="pills-osaka">
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Dotonbori – Ausgehviertel mit Kanal, abends</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Kuromon Markt – Markthalle, Streetfood</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Takoyaki essen – Oktopusbällchen, Osaka-Spezialität</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Okonomiyaki essen – japanischer Pfannkuchen</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Shinsekai – altes Retro-Viertel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Morgens Frühstück &amp; weiter nach Tokyo</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <button class="add-pill-btn" onclick="addPill('pills-osaka')">+ Punkt hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transfer">Shinkansen Nozomi &nbsp;·&nbsp; ca. 2h 30m</div>
+
+  <!-- STOP 4: TOKYO SHOPPING -->
+  <div class="stop">
+    <div class="dot dot-purple"></div>
+    <div class="card purple">
+      <div class="card-head">
+        <div class="card-title">Tokyo – Shopping &amp; Abschluss</div>
+        <div class="card-dates">2. Nov – 6. Nov &nbsp;·&nbsp; 4 Nächte &nbsp;·&nbsp; Abflug 6. Nov</div>
+        <div class="card-pills" id="pills-tokyo2">
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Shinjuku – direkt vor der Tür, Shopping &amp; Nightlife</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Golden Gai – winzige Bar-Gassen, abends</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Isetan &amp; Takashimaya – beste Kaufhäuser Tokyos</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Meiji-Schrein – Herbstfestival 1.–3. Nov!</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">2. Nov: Bugaku Hofstanz am Schrein, 11:45 Uhr</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">3. Nov: Yabusame – Bogenschießen zu Pferd, 13 Uhr</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Shibuya Scramble Crossing – die ikonische Kreuzung</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Harajuku Takeshita-dori – verrückte Mode &amp; Souvenirs</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Omotesando – elegantes Shopping-Viertel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Shimokitazawa – Vintage &amp; Second-Hand-Viertel</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <div class="pill-wrap"><span class="pill" contenteditable="false">Don Quijote – günstiger Souvenir-Laden, 24h</span><button class="del-pill" onclick="delPill(this)">×</button></div>
+          <button class="add-pill-btn" onclick="addPill('pills-tokyo2')">+ Punkt hinzufügen</button>
+        </div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sub" style="background: rgba(219,112,147,0.08); border-color: rgba(219,112,147,0.2);">
+          <div class="sub-head" onclick="toggle('colormetokyo')">
+            <div>
+              <div class="sub-title" style="color:#F0A0C0;">✨ Color Me Tokyo – Farbberatung</div>
+              <div class="sub-meta" style="color:#A06080;">Vorschlag &nbsp;·&nbsp; Minami Azabu, Minato City &nbsp;·&nbsp; ca. 1,5h</div>
+            </div>
+            <span class="chev" id="colormetokyo-chev">▼</span>
+          </div>
+          <div class="sub-body" id="colormetokyo">
+            <div class="tips" id="tips-colormetokyo">
+              <div class="tip-wrap"><div class="tip" style="color:#C090A8;" contenteditable="false">Personal Color Analysis – du lernst deine Saisonfarbe, Undertone, und welche Farben für Makeup, Schmuck und Kleidung am besten passen</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" style="color:#C090A8;" contenteditable="false">Menü 3 – Personal Color Analysis, ca. 1 Stunde, ¥25.000 (ca. 160€). Inklusive Mini Pocket Color Book</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" style="color:#C090A8;" contenteditable="false">Adresse: GLAMOROUS H Foresight Minami Azabu 4. Stock, Minami Azabu 4-5-48, Minato City</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false"><a href="https://www.colormetokyo.com/salon" style="color:#F0A0C0;">→ Jetzt buchen auf colormetokyo.com</a></div><button class="del-tip" onclick="delTip(this)">×</button></div>
+            </div>
+            <button class="add-tip-btn" onclick="addTip('tips-colormetokyo')">+ Punkt hinzufügen</button>
+          </div>
+        </div>
+        <div class="sub purple-sub">
+          <div class="sub-head" onclick="toggle('kamakura')">
+            <div>
+              <div class="sub-title">↳ Kamakura &nbsp;·&nbsp; Tagesausflug</div>
+              <div class="sub-meta">1h 10m mit dem Zug &nbsp;·&nbsp; ganzer Tag</div>
+            </div>
+            <span class="chev" id="kamakura-chev">▼</span>
+          </div>
+          <div class="sub-body" id="kamakura">
+            <div class="tips" id="tips-kamakura">
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Café Yoridocoro – morgens zum Frühstück, gemütlicher Start in den Tag</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Kotoku-in – der große Buddha, 13m hoch, sitzt im Freien. Man kann sogar reingehen</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Hase-dera Tempel – Tausende kleine Jizo-Figuren, schöner Garten, Meerblick von oben</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Tsurugaoka Hachimangu – Hauptschrein mit schöner Allee und Lotusterassen</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Komachi-dori – Fußgängerzone mit Souvenirs und Matcha-Snacks</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+              <div class="tip-wrap"><div class="tip" contenteditable="false">Enoshima optional: 20 Min weiter, kleine Insel mit Tempel und Meeresfrüchten</div><button class="del-tip" onclick="delTip(this)">×</button></div>
+            </div>
+            <button class="add-tip-btn" onclick="addTip('tips-kamakura')">+ Punkt hinzufügen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EVENTS & MÄRKTE -->
+<div class="events-section">
+  <div class="section-label-main">Veranstaltungen &amp; Märkte im Reisezeitraum</div>
+
+  <div class="section-label-city" style="color:#7A74BB;">Tokyo · 25.–28. Okt</div>
+  <div class="ev-card" style="border:1px solid rgba(157,150,240,0.2); background:#1A1833;">
+    <div class="ev-head" onclick="toggle('ev1')">
+      <div>
+        <div class="ev-title" style="color:#C8C3FF;">Tokyo Ramen Festival</div>
+        <div class="ev-meta" style="color:#7A74BB;">Ende Okt – Anfang Nov &nbsp;·&nbsp; Komazawa Olympic Park</div>
+      </div>
+      <span class="chev" id="ev1-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev1" style="color:#AAA6D8;">Fast 40 Ramen-Stände aus ganz Japan an einem Ort. Jede Region hat ihren eigenen Stil – Sapporo, Hakata, Tokyo, Kyoto. Eintritt frei, Ramen-Bowls einzeln kaufen. Perfekt für einen Nachmittag.</div>
+  </div>
+
+  <div class="section-label-city" style="color:#A05A40;">Kyoto · 28. Okt – 1. Nov</div>
+  <div class="ev-card" style="border:1px solid rgba(224,114,74,0.2); background:#281610;">
+    <div class="ev-head" onclick="toggle('ev2')">
+      <div>
+        <div class="ev-title" style="color:#FFD5C2;">Kyoto Antique Fair</div>
+        <div class="ev-meta" style="color:#A05A40;">30. Okt – 1. Nov &nbsp;·&nbsp; Kyoto Pulse Plaza</div>
+      </div>
+      <span class="chev" id="ev2-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev2" style="color:#C8A090;">Größte Antiquitätenmesse Westjapans mit über 350 Händlern. Vintage Kimono, Keramik, Möbel, Kunstobjekte. Eintritt ca. 500 Yen. Guter Ausflug für einen Nachmittag.</div>
+  </div>
+  <div class="ev-card" style="border:1px solid rgba(224,114,74,0.2); background:#281610;">
+    <div class="ev-head" onclick="toggle('ev3')">
+      <div>
+        <div class="ev-title" style="color:#FFD5C2;">Gion Odori – Geisha Tanzvorführung</div>
+        <div class="ev-meta" style="color:#A05A40;">Anfang November &nbsp;·&nbsp; Gion Higashi Kaburenjo Theater</div>
+      </div>
+      <span class="chev" id="ev3-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev3" style="color:#C8A090;">Die einzige öffentliche Herbst-Tanzvorführung der Geisha in Kyoto – einmal im Jahr. Geiko und Maiko zeigen klassische Tänze und Gesang. Tickets im Voraus kaufen, sind schnell ausverkauft.</div>
+  </div>
+  <div class="ev-card" style="border:1px solid rgba(224,114,74,0.2); background:#281610;">
+    <div class="ev-head" onclick="toggle('ev4')">
+      <div>
+        <div class="ev-title" style="color:#FFD5C2;">Abend-Illuminationen in Tempeln</div>
+        <div class="ev-meta" style="color:#A05A40;">Ab Anfang Nov &nbsp;·&nbsp; Eikan-do, Kodai-ji, Kiyomizu-dera</div>
+      </div>
+      <span class="chev" id="ev4-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev4" style="color:#C8A090;">Mehrere Tempel öffnen abends und beleuchten ihre Ahornbäume – rote und orangene Blätter im Lichtkegel, reflektiert in Teichen. Eikan-do ist das Highlight. Getrennte Abendtickets nötig.</div>
+  </div>
+  <div class="ev-card" style="border:1px solid rgba(224,114,74,0.2); background:#281610;">
+    <div class="ev-head" onclick="toggle('ev5')">
+      <div>
+        <div class="ev-title" style="color:#FFD5C2;">Ohitaki Feuer-Festival – Fushimi Inari</div>
+        <div class="ev-meta" style="color:#A05A40;">Anfang November &nbsp;·&nbsp; Fushimi Inari Taisha</div>
+      </div>
+      <span class="chev" id="ev5-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev5" style="color:#C8A090;">Hunderttausende beschriftete Holzstäbchen mit Wünschen werden in einem großen Feuer verbrannt. Sehr atmosphärisch, besonders nachts. Kostenlos.</div>
+  </div>
+  <div class="ev-card" style="border:1px solid rgba(210,155,50,0.2); background:#1E1200;">
+    <div class="ev-head" onclick="toggle('ev6')">
+      <div>
+        <div class="ev-title" style="color:#FFD98A;">Toji Garakuta-ichi – Antikmarkt</div>
+        <div class="ev-meta" style="color:#9A7030;">1. Nov (erster Sonntag) &nbsp;·&nbsp; Toji Tempel &nbsp;·&nbsp; 7–16 Uhr</div>
+      </div>
+      <span class="chev" id="ev6-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev6" style="color:#C8A860;">Antikmarkt unter dem fünfstöckigen Holzpagoda des Toji Tempels. Vintage Kimono, Keramik, alte Holzschnitte. Eintritt frei. Letzter Tag in Kyoto – perfekter Abschluss.</div>
+  </div>
+
+  <div class="section-label-city" style="color:#7A74BB;">Tokyo · 2.–6. Nov</div>
+  <div class="ev-card" style="border:1px solid rgba(157,150,240,0.2); background:#1A1833;">
+    <div class="ev-head" onclick="toggle('ev7')">
+      <div>
+        <div class="ev-title" style="color:#C8C3FF;">Meiji-Schrein Herbstfestival</div>
+        <div class="ev-meta" style="color:#7A74BB;">1.–3. Nov &nbsp;·&nbsp; Meiji Jingu &nbsp;·&nbsp; kostenlos</div>
+      </div>
+      <span class="chev" id="ev7-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev7" style="color:#AAA6D8;">
+      <strong style="color:#C8C3FF;">2. Nov, 11:45 Uhr:</strong> Bugaku – klassischer Hofstanz in prächtigen Kostümen.<br>
+      <strong style="color:#C8C3FF;">3. Nov, 9 Uhr:</strong> Kyudo – rituelles Bogenschießen.<br>
+      <strong style="color:#C8C3FF;">3. Nov, 13 Uhr:</strong> Yabusame – Bogenschießen zu Pferd. Früh da sein für einen guten Platz!
+    </div>
+  </div>
+  <div class="ev-card" style="border:1px solid rgba(157,150,240,0.2); background:#1A1833;">
+    <div class="ev-head" onclick="toggle('ev8')">
+      <div>
+        <div class="ev-title" style="color:#C8C3FF;">Oedo Antique Market</div>
+        <div class="ev-meta" style="color:#7A74BB;">1. &amp; 3. Sonntag &nbsp;·&nbsp; Tokyo International Forum</div>
+      </div>
+      <span class="chev" id="ev8-chev">▼</span>
+    </div>
+    <div class="ev-body" id="ev8" style="color:#AAA6D8;">Japans größter Outdoor-Antikmarkt mit ca. 250 Händlern. Vintage Kimono, Porzellan, Lackobjekte, Schmuck. Nächster Termin im Reisezeitraum prüfen!</div>
+  </div>
+</div>
+
+<script>
+let editMode = false;
+
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('editBtn');
+  btn.textContent = editMode ? 'Fertig' : 'Bearbeiten';
+  btn.classList.toggle('active', editMode);
+
+  // Toggle contenteditable on all pills and tips
+  document.querySelectorAll('.pill').forEach(p => {
+    p.contentEditable = editMode ? 'true' : 'false';
+  });
+  document.querySelectorAll('.tip').forEach(t => {
+    t.contentEditable = editMode ? 'true' : 'false';
+  });
+}
+
+function delPill(btn) {
+  btn.closest('.pill-wrap').remove();
+}
+
+function addPill(containerId) {
+  const container = document.getElementById(containerId);
+  const addBtn = container.querySelector('.add-pill-btn');
+  const wrap = document.createElement('div');
+  wrap.className = 'pill-wrap';
+
+  // Match pill color of siblings
+  const existingPill = container.querySelector('.pill');
+  const pillStyle = existingPill ? existingPill.style.cssText : '';
+
+  wrap.innerHTML = `<span class="pill" contenteditable="true" style="${pillStyle}">Neuer Punkt</span><button class="del-pill" onclick="delPill(this)">×</button>`;
+  container.insertBefore(wrap, addBtn);
+
+  const newPill = wrap.querySelector('.pill');
+  newPill.focus();
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(newPill);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function delTip(btn) {
+  btn.closest('.tip-wrap').remove();
+}
+
+function addTip(containerId) {
+  const container = document.getElementById(containerId);
+  const addBtn = container.parentElement.querySelector('.add-tip-btn');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'tip-wrap';
+  wrap.innerHTML = `<div class="tip" contenteditable="true">Neuer Punkt</div><button class="del-tip" onclick="delTip(this)">×</button>`;
+  container.appendChild(wrap);
+
+  const newTip = wrap.querySelector('.tip');
+  newTip.focus();
+  const range = document.createRange();
+  range.selectNodeContents(newTip);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function toggle(id) {
+  const b = document.getElementById(id);
+  const c = document.getElementById(id+'-chev');
+  const o = b.classList.toggle('open');
+  if(c) c.classList.toggle('open', o);
+}
+</script>
+</body>
+</html>
